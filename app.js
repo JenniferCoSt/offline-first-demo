@@ -5,7 +5,27 @@ const headerText = document.getElementById('header');
 const textInput = document.getElementById('textInput');
 const button = document.getElementById('saveChangeButton');
 
-button.onclick = () => headerText.textContent = textInput.value;
+localDB.sync(remoteDB, {live: true, retry: true
+}).on('change', function(change) {
+    console.log('Synced!', change)
+}).on('error', function(e){
+    console.log('Sync error: ', e)
+})
+
+button.onclick = () => {
+    headerText.textContent = textInput.value
+
+    localDB.post({
+        text: textInput.value,
+        timestamp: new Date().getTime()
+    })
+    .then(function(response) {
+        console.log('Locally saved!', response)
+    })
+    .catch(function(e) {
+        console.log('Error: ', e)
+    })
+};
 
 /*
 localDB.put({
@@ -16,19 +36,4 @@ localDB.put({
 }).catch(function(e){
     console.log('Error: ', e)
 })
-
-localDB.put({
-    _id: 'test2',
-    text: 'Hello again offline world'
-}).then(function(response) {
-    console.log('Locally saved!', response)
-}).catch(function(e){
-    console.log('Error: ', e)
-})
-
-localDB.sync(remoteDB, {live: true}).on('change', function(change) {
-    console.log('Synced!', change)
-}).on('error', function(e){
-    console.log('Sync error: ', e)
-})
-    */
+*/
