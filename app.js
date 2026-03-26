@@ -1,6 +1,13 @@
 const localDB = new PouchDB('offline-first-demo')
 const remoteDB = 'http://localhost:5984/offline-first-demo'
 
+const headerText = document.getElementById('header');
+const textInput = document.getElementById('textInput');
+const button = document.getElementById('saveChangeButton');
+
+button.onclick = () => headerText.textContent = textInput.value;
+
+/*
 localDB.put({
     _id: 'test',
     text: 'Hello offline world'
@@ -24,3 +31,4 @@ localDB.sync(remoteDB, {live: true}).on('change', function(change) {
 }).on('error', function(e){
     console.log('Sync error: ', e)
 })
+    */
