@@ -6,6 +6,26 @@ const textInput = document.getElementById("textInput");
 const colorInput = document.getElementById("colorInput");
 const button = document.getElementById("saveChangeButton");
 
+/*
+remoteDB.replicate
+  .to(localDB, { live: true, retry: true })
+  .on("change", function (change) {
+    console.log("Replicated from remote!", change);
+  })
+  .on("error", function (e) {
+    console.log("Remote replicate error: ", e);
+  });
+
+localDB.replicate
+  .to(remoteDB, { live: true, retry: true })
+  .on("change", function (change) {
+    console.log("Replicated from local!", change);
+  })
+  .on("error", function (e) {
+    console.log("Local replicate error: ", e);
+  });
+  */
+
 localDB
   .sync(remoteDB, { live: true, retry: true })
   .on("change", function (change) {
@@ -20,6 +40,7 @@ localDB
   .then(function (doc) {
     headerText.textContent = doc.text;
     headerText.style.color = doc.color;
+    colorInput.value = doc.color;
   })
   .catch(function (e) {
     if (e.name == "not_found") {
@@ -44,6 +65,7 @@ button.onclick = () => {
       .then(function (response) {
         headerText.textContent = textInput.value || doc.text;
         headerText.style.color = colorInput.value || doc.color;
+        //colorInput.value = doc.color;
         console.log("Locally saved!", doc);
       })
       .catch(function (e) {
